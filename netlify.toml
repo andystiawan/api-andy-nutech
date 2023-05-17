@@ -1,12 +1,5 @@
 [build]
   command = "npm run build"
-  functions = "functions"
 
 [dev]
-  command = "npm run dev"
-  functions = "functions"
-
-[[redirects]]
-  from = "/*"
-  to = "/:splat"
-  status = 200
+  command = "node server.js"
