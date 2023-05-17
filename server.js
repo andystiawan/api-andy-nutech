@@ -8,7 +8,7 @@ const mongoose = require("mongoose");
 const multer = require("multer");
 const app = express();
 const path = require("path");
-const secretKey = "secret_key"; // Kunci rahasia untuk JWT
+const secretKey = "rahasia123"; // Kunci rahasia untuk JWT
 
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -75,7 +75,7 @@ const authenticateToken = (req, res, next) => {
     return res.status(401).send("Token JWT tidak ditemukan.");
   }
 
-  jwt.verify(token, "rahasia", (err, user) => {
+  jwt.verify(token, secretKey, (err, user) => {
     if (err) {
       return res.status(403).send("Token JWT tidak valid.");
     }
@@ -86,6 +86,24 @@ const authenticateToken = (req, res, next) => {
     next();
   });
 };
+
+//Get User
+app.get("/user", authenticateToken, async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ status: 404, message: "User not found !" });
+    }
+
+    return res.status(200).json(user);
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ status: 500, message: "Internal server error" });
+  }
+});
 
 // Endpoint: Register
 app.post("/register", (req, res) => {
@@ -101,7 +119,7 @@ app.post("/register", (req, res) => {
       user
         .save()
         .then((result) => {
-          const token = jwt.sign({ id: user._id }, "rahasia", {
+          const token = jwt.sign({ id: user._id }, secretKey, {
             expiresIn: 86400,
           });
 
@@ -150,7 +168,7 @@ app.post("/login", (req, res) => {
             });
           }
 
-          const token = jwt.sign({ id: user._id }, "rahasia", {
+          const token = jwt.sign({ id: user._id }, secretKey, {
             expiresIn: 86400,
           });
 
