@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
@@ -5,9 +6,8 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const mongoose = require("mongoose");
 const multer = require("multer");
-const path = require("path");
-// const serverless = require("serverless-http");
 const app = express();
+const path = require("path");
 const secretKey = "secret_key"; // Kunci rahasia untuk JWT
 
 app.use(cors());
@@ -15,14 +15,12 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 // Membuat koneksi ke MongoDB
-mongoose.connect(
-  "mongodb+srv://andyadmin:KXfNiZKpaS2WhsBN@atlascluster.kub4fyr.mongodb.net/",
-  {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  }
-);
+mongoose.connect(`${process.env.MONGODB_URI}/${process.env.MONGODB_DB}`, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
 const db = mongoose.connection;
+
 db.on("error", console.error.bind(console, "Connection error:"));
 db.once("open", () => {
   console.log("Connected to the database");
@@ -293,7 +291,6 @@ app.delete("/products/:id", authenticateToken, async (req, res) => {
   }
 });
 
-const port = process.env.PORT || 3000;
-app.listen(port, () => {
-  console.log(`Server running on port ${port}`);
+app.listen(process.env.PORT, () => {
+  console.log(`Server running on http://127.0.0.1:${process.env.PORT}`);
 });
