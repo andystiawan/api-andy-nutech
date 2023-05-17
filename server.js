@@ -6,7 +6,7 @@ const bcrypt = require("bcrypt");
 const mongoose = require("mongoose");
 const multer = require("multer");
 const path = require("path");
-const serverless = require("serverless-http");
+// const serverless = require("serverless-http");
 const app = express();
 
 const port = 3000;
@@ -299,4 +299,6 @@ app.delete("/products/:id", authenticateToken, async (req, res) => {
   }
 });
 
-module.exports.handler = serverless(app);
+app.listen(process.env.PORT || 3000, () => {
+  console.log("Server is running");
+});
