@@ -6,9 +6,7 @@
   "scripts": {
     "build": "netlify deploy --prod"
   },
-  "keywords": [
-    "nutech"
-  ],
+  "keywords": [],
   "author": "andy setiawan",
   "license": "ISC",
   "dependencies": {
@@ -21,6 +19,7 @@
     "mongoose": "^7.1.1",
     "multer": "^1.4.5-lts.1",
     "netlify-cli": "^15.1.0",
+    "netlify-lambda": "^2.0.15",
     "serverless-http": "^3.2.0"
   }
 }
