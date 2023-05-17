@@ -5,20 +5,18 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const mongoose = require("mongoose");
 const multer = require("multer");
-const port = 3000;
 const path = require("path");
 const serverless = require("serverless-http");
 const app = express();
-const router = express.Router();
 
-let records = [];
+const port = 3000;
 const secretKey = "secret_key"; // Kunci rahasia untuk JWT
 
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-router.get("/", (req, res) => {
+app.get("/", (req, res) => {
   res.send("App is running..");
 });
 
@@ -87,7 +85,7 @@ const authenticateToken = (req, res, next) => {
 };
 
 // Endpoint: Register
-router.post("/register", (req, res) => {
+app.post("/register", (req, res) => {
   const { username, password } = req.body;
 
   // TODO: Validasi input
@@ -124,7 +122,7 @@ router.post("/register", (req, res) => {
 });
 
 // Endpoint: Login
-router.post("/login", (req, res) => {
+app.post("/login", (req, res) => {
   const { username, password } = req.body;
 
   // TODO: Validasi input
@@ -173,7 +171,7 @@ router.post("/login", (req, res) => {
 });
 
 // Endpoint: Get Foto Barang
-router.get("/products/photo/:filename", (req, res) => {
+app.get("/products/photo/:filename", (req, res) => {
   const filename = req.params.filename;
 
   // Menggabungkan filename dengan path ke direktori foto
@@ -184,7 +182,7 @@ router.get("/products/photo/:filename", (req, res) => {
 });
 
 // Endpoint untuk membuat data barang baru
-router.post(
+app.post(
   "/products",
   authenticateToken,
   upload.single("photo"),
@@ -224,7 +222,7 @@ router.post(
 );
 
 // Endpoint untuk mendapatkan data barang
-router.get("/products", authenticateToken, async (req, res) => {
+app.get("/products", authenticateToken, async (req, res) => {
   try {
     // Ambil semua data barang dari database
     const products = await Product.find();
@@ -236,7 +234,7 @@ router.get("/products", authenticateToken, async (req, res) => {
 });
 
 // Endpoint untuk mendapatkan data barang berdasarkan ID
-router.get("/products/:id", authenticateToken, async (req, res) => {
+app.get("/products/:id", authenticateToken, async (req, res) => {
   const productId = req.params.id;
 
   try {
@@ -258,7 +256,7 @@ router.get("/products/:id", authenticateToken, async (req, res) => {
 });
 
 // Endpoint untuk mengupdate data barang
-router.put("/products/:id", authenticateToken, async (req, res) => {
+app.put("/products/:id", authenticateToken, async (req, res) => {
   const productId = req.params.id;
   const { photo, name, purchasePrice, sellingPrice, stock } = req.body;
 
@@ -287,7 +285,7 @@ router.put("/products/:id", authenticateToken, async (req, res) => {
 });
 
 // Endpoint untuk menghapus data barang
-router.delete("/products/:id", authenticateToken, async (req, res) => {
+app.delete("/products/:id", authenticateToken, async (req, res) => {
   const productId = req.params.id;
 
   try {
@@ -301,5 +299,4 @@ router.delete("/products/:id", authenticateToken, async (req, res) => {
   }
 });
 
-app.use("/.netlify/functions/api", router);
 module.exports.handler = serverless(app);
