@@ -16,10 +16,6 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-app.get("/", (req, res) => {
-  res.send("App is running..");
-});
-
 // Membuat koneksi ke MongoDB
 mongoose.connect(
   "mongodb+srv://andyadmin:KXfNiZKpaS2WhsBN@atlascluster.kub4fyr.mongodb.net/",
@@ -302,3 +298,9 @@ app.delete("/products/:id", authenticateToken, async (req, res) => {
 app.listen(process.env.PORT || 3000, () => {
   console.log("Server is running");
 });
+
+app.get("/", (req, res) => {
+  res.send("App is running....");
+});
+
+module.exports = app;
