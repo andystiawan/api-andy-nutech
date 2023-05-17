@@ -294,24 +294,3 @@ app.delete("/products/:id", authenticateToken, async (req, res) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 });
-
-app.listen(process.env.PORT || 3000, () => {
-  console.log("Server is running");
-});
-
-exports.handler = async (event, context) => {
-  const response = await new Promise((resolve, reject) => {
-    app(event, context, (error, result) => {
-      if (error) {
-        reject(error);
-      } else {
-        resolve(result);
-      }
-    });
-  });
-
-  return {
-    statusCode: 200, // Set the appropriate status code here
-    body: JSON.stringify(response),
-  };
-};

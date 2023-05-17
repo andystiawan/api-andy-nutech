@@ -4,8 +4,7 @@
   "description": "test-nutech",
   "main": "index.js",
   "scripts": {
-    "build": "echo 'No build steps required'",
-    "dev": "netlify dev && netlify deploy"
+    "start": "node index.js"
   },
   "keywords": [],
   "author": "andy setiawan",
