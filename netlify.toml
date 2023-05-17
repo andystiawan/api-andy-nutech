@@ -1,5 +1,8 @@
 [build]
   command = "npm run build"
+   functions = "functions"
 
 [dev]
-  command = "node server.js"
+  command = "npm run dev"
+  functions = "functions"
+

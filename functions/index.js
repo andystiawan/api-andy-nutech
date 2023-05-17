@@ -295,10 +295,27 @@ app.delete("/products/:id", authenticateToken, async (req, res) => {
   }
 });
 
-app.listen(process.env.PORT || port, () => {
+app.listen(process.env.PORT || 3000, () => {
   console.log("Server is running");
 });
 
 app.get("/", (req, res) => {
   res.send("App is running....");
 });
+
+exports.handler = async (event, context) => {
+  const response = await new Promise((resolve, reject) => {
+    app(event, context, (error, result) => {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(result);
+      }
+    });
+  });
+
+  return {
+    statusCode: 200, // Set the appropriate status code here
+    body: JSON.stringify(response),
+  };
+};
