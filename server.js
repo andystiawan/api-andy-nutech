@@ -26,17 +26,21 @@ db.once("open", () => {
   console.log("Connected to the database");
 });
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "uploads");
-  },
-  filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    cb(null, uniqueSuffix + "-" + file.originalname);
-  },
-});
+// const storage = multer.diskStorage({
+//   destination: function (req, file, cb) {
+//     cb(null, "uploads");
+//   },
+//   filename: function (req, file, cb) {
+//     const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+//     cb(null, uniqueSuffix + "-" + file.originalname);
+//   },
+// });
 
-const upload = multer({ storage: storage });
+// const upload = multer({ storage: storage });
+
+var storage = multer.memoryStorage();
+var upload = multer({ storage: storage });
+
 // Membuat skema dan model barang
 const productSchema = new mongoose.Schema({
   photo: String,
@@ -180,12 +184,15 @@ app.post(
   upload.single("photo"),
   async (req, res) => {
     const { name, purchasePrice, sellingPrice, stock } = req.body;
-    const foto = req.file;
-    const filename = foto.filename;
+    var image = new Image({
+      name: req.body.name,
+    });
+    image.img.data = req.file.buffer;
+    image.img.contentType = "image/jpg";
     try {
       // Simpan data barang baru ke database
       const product = new Product({
-        photo: filename,
+        photo: image,
         name,
         purchasePrice,
         sellingPrice,
