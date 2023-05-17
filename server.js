@@ -291,6 +291,8 @@ app.delete("/products/:id", authenticateToken, async (req, res) => {
   }
 });
 
-app.listen(process.env.PORT, () => {
-  console.log(`Server running on http://127.0.0.1:${process.env.PORT}`);
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+  console.log(`Server running on http://127.0.0.1:${PORT}`);
 });
