@@ -314,5 +314,8 @@ exports.handler = async (event, context) => {
     });
   });
 
-  return response;
+  return {
+    statusCode: 200, // Set the appropriate status code here
+    body: JSON.stringify(response),
+  };
 };

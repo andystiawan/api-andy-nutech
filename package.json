@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "echo 'No build steps required'",
-    "dev": "netlify dev"
+    "dev": "netlify dev && netlify deploy"
   },
   "keywords": [],
   "author": "andy setiawan",
