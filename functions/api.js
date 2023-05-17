@@ -5,16 +5,22 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const mongoose = require("mongoose");
 const multer = require("multer");
-const app = express();
 const port = 3000;
 const path = require("path");
 const serverless = require("serverless-http");
+const app = express();
 const router = express.Router();
+
+let records = [];
 const secretKey = "secret_key"; // Kunci rahasia untuk JWT
 
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+
+router.get("/", (req, res) => {
+  res.send("App is running..");
+});
 
 // Membuat koneksi ke MongoDB
 mongoose.connect(
@@ -295,9 +301,5 @@ router.delete("/products/:id", authenticateToken, async (req, res) => {
   }
 });
 
-// app.listen(port, () => {
-//   console.log(`Server running on http://localhost:${port}`);
-// });
-
-app.use("/.netlify/functions/server", router);
+app.use("/.netlify/functions/api", router);
 module.exports.handler = serverless(app);
