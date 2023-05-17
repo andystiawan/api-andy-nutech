@@ -49,7 +49,6 @@ const productSchema = new mongoose.Schema({
   sellingPrice: Number,
   stock: Number,
 });
-
 const Product = mongoose.model("Product", productSchema);
 
 // Model User
@@ -58,6 +57,14 @@ const userSchema = new mongoose.Schema({
   password: String,
 });
 const User = mongoose.model("User", userSchema);
+
+//Image model
+// const ImageSchema = new mongoose.Schema({
+//   name: { type: String, required: true, max: 100 },
+//   img: { data: Buffer, contentType: String },
+// });
+
+// const Image = mongoose.model("Image", ImageSchema);
 
 // Middleware untuk verifikasi token JWT
 const authenticateToken = (req, res, next) => {
@@ -184,15 +191,10 @@ app.post(
   upload.single("photo"),
   async (req, res) => {
     const { name, purchasePrice, sellingPrice, stock } = req.body;
-    var image = new Image({
-      name: req.body.name,
-    });
-    image.img.data = req.file.buffer;
-    image.img.contentType = "image/jpg";
     try {
       // Simpan data barang baru ke database
       const product = new Product({
-        photo: image,
+        photo: req.file.buffer.toString("base64"),
         name,
         purchasePrice,
         sellingPrice,
