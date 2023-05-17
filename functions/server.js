@@ -303,4 +303,16 @@ app.get("/", (req, res) => {
   res.send("App is running....");
 });
 
-module.exports = app;
+exports.handler = async (event, context) => {
+  const response = await new Promise((resolve, reject) => {
+    app(event, context, (error, result) => {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(result);
+      }
+    });
+  });
+
+  return response;
+};
