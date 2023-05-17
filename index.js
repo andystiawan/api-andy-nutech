@@ -294,3 +294,7 @@ app.delete("/products/:id", authenticateToken, async (req, res) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 });
+
+app.listen(port, () => {
+  console.log(`Server running on http://localhost:${port}`);
+});
