@@ -8,8 +8,6 @@ const multer = require("multer");
 const path = require("path");
 // const serverless = require("serverless-http");
 const app = express();
-
-const port = 3000;
 const secretKey = "secret_key"; // Kunci rahasia untuk JWT
 
 app.use(cors());
@@ -295,6 +293,7 @@ app.delete("/products/:id", authenticateToken, async (req, res) => {
   }
 });
 
+const port = process.env.PORT || 3000;
 app.listen(port, () => {
-  console.log(`Server running on http://localhost:${port}`);
+  console.log(`Server running on port ${port}`);
 });
