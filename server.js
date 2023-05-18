@@ -212,7 +212,7 @@ app.post(
     try {
       // Simpan data barang baru ke database
       const product = new Product({
-        photo: req.file.buffer.toString("base64url"),
+        photo: req.file.buffer.toString("base64"),
         name,
         purchasePrice,
         sellingPrice,
@@ -293,7 +293,7 @@ app.put(
       }
 
       // Update data barang
-      product.photo = req.file.buffer.toString("base64url");
+      product.photo = req.file.buffer.toString("base64");
       product.name = name;
       product.purchasePrice = purchasePrice;
       product.sellingPrice = sellingPrice;
