@@ -282,7 +282,6 @@ app.put(
   async (req, res) => {
     const productId = req.params.id;
     const { name, purchasePrice, sellingPrice, stock } = req.body;
-
     try {
       // Cari data barang berdasarkan ID
       const product = await Product.findById(productId);
