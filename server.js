@@ -300,7 +300,7 @@ app.put(
       product.stock = stock;
       await product.save();
 
-      res.json({ message: "Data barang berhasil diubah" });
+      res.json({ status: 200, message: "Data barang berhasil diubah" });
     } catch (error) {
       console.error(error);
       res.status(500).json({ message: "Data barang gagal diubah" });
