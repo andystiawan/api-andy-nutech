@@ -212,7 +212,7 @@ app.post(
     try {
       // Simpan data barang baru ke database
       const product = new Product({
-        photo: req.file.buffer.toString("base64"),
+        photo: req.file.buffer,
         name,
         purchasePrice,
         sellingPrice,
@@ -275,33 +275,38 @@ app.get("/products/:id", authenticateToken, async (req, res) => {
 });
 
 // Endpoint untuk mengupdate data barang
-app.put("/products/:id", authenticateToken, async (req, res) => {
-  const productId = req.params.id;
-  const { photo, name, purchasePrice, sellingPrice, stock } = req.body;
+app.put(
+  "/products/:id",
+  authenticateToken,
+  upload.single("photo"),
+  async (req, res) => {
+    const productId = req.params.id;
+    const { name, purchasePrice, sellingPrice, stock } = req.body;
 
-  try {
-    // Cari data barang berdasarkan ID
-    const product = await Product.findById(productId);
+    try {
+      // Cari data barang berdasarkan ID
+      const product = await Product.findById(productId);
 
-    // Jika data barang tidak ditemukan
-    if (!product) {
-      return res.status(404).json({ message: "Data barang tidak ditemukan" });
+      // Jika data barang tidak ditemukan
+      if (!product) {
+        return res.status(404).json({ message: "Data barang tidak ditemukan" });
+      }
+
+      // Update data barang
+      product.photo = req.file.buffer;
+      product.name = name;
+      product.purchasePrice = purchasePrice;
+      product.sellingPrice = sellingPrice;
+      product.stock = stock;
+      await product.save();
+
+      res.json({ message: "Data barang berhasil diubah" });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Data barang gagal diubah" });
     }
-
-    // Update data barang
-    product.photo = photo;
-    product.name = name;
-    product.purchasePrice = purchasePrice;
-    product.sellingPrice = sellingPrice;
-    product.stock = stock;
-    await product.save();
-
-    res.json({ message: "Data barang berhasil diubah" });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Data barang gagal diubah" });
   }
-});
+);
 
 // Endpoint untuk menghapus data barang
 app.delete("/products/:id", authenticateToken, async (req, res) => {
@@ -318,7 +323,7 @@ app.delete("/products/:id", authenticateToken, async (req, res) => {
   }
 });
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3030;
 
 app.listen(PORT, () => {
   console.log(`Server running on http://127.0.0.1:${PORT}`);
