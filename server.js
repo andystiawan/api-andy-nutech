@@ -72,12 +72,16 @@ const authenticateToken = (req, res, next) => {
   const token = authHeader && authHeader.split(" ")[1];
 
   if (!token) {
-    return res.status(401).send("Token JWT tidak ditemukan.");
+    return res
+      .status(401)
+      .send({ status: 401, message: "Token JWT tidak ditemukan." });
   }
 
   jwt.verify(token, secretKey, (err, user) => {
     if (err) {
-      return res.status(403).send("Token JWT tidak valid.");
+      return res
+        .status(403)
+        .send({ status: 403, message: "Token JWT tidak valid." });
     }
 
     // Tambahkan objek user ke req untuk digunakan pada handler endpoint berikutnya (opsional)
